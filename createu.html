@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, intial-scale=1.0">
+        <title>Creating post and stories</title>
+        <link rel="stylesheet" href="create.css">
+    </head>
+<body>
+    <div class="container" id="imgBox">
+        <div id="prevText"></div>
+        <textarea id="textBox" placeholder="Add Caption: "></textarea>
+        <input type="file" accept="image/*" name="image" id="file" style="display: none"
+        onchange="loadFile(event)">
+
+        <label for="file"><img src="mainicon.webp" class="upload-icon"></label>
+    </div>
+    <script>
+        var textBox=  document.getElementById("textBox");
+        var imgBox=  document.getElementById("imgBox");
+
+
+        textBox.onkeyup=textBox.onkeypress=function(){
+            document.getElementById("prevText").innerHTML=this.value;
+        }
+        var loadFile=function(event){
+            imgBox.style.backgroundImage="url("+URL.createObjectURL(event.target.files[0])+")";
+        }
+
+    </script>
+</body>
+</html>

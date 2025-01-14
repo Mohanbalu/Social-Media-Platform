@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Interests</title>
+    <link rel="stylesheet" href="interests.css">
+</head>
+
+<body>
+    <h1 class="title">Interests</h1>
+    <div id="image-rotator-container" class="green-background">
+        <div id="content-box">
+            <h2 id="content-title">Title</h2>
+        </div>
+
+        <div id="image-rotator">
+            <img class="image" src="sports.jpg.jpg" onclick="nextimg(this)" id = "img">
+            <img class="image" src="art.jpg" onclick="nextimg(this)"id = "img">
+            <img class="image" src="music.jpg" onclick="nextimg(this)"id = "img">
+            <img class="image" src="travel.jpg" onclick="nextimg(this)"id = "img">
+            <img class="image" src="technology.avif" onclick="nextimg(this)"id = "img">
+            <img class="image" src="fitness.jpg" onclick="nextimg(this)"id = "img">
+            <img class="image" src="gaming.jpg" onclick="nextimg(this)"id = "img">
+        </div>
+    </div>
+    <div class="button-container">
+        <button class="button1" id="prev-button"><img src="previous.png" width="20px" height="20px"></button>
+        <button class="button2" id="next-button"><img src="next.png" width="20px" height="20px"></button>
+    </div>
+    <input type="submit" value="Submit" class="animated-button" onclick="nextpage()">
+    <script src="interests.js"></script>
+    <script src="jquery.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+</body>
+
+</html>

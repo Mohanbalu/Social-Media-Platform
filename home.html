@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Articles</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            background-color: #f0f2f5;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            background-color: #333;
+            overflow: hidden;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            height: 60px;
+        }
+
+        .navbar a {
+            color: white;
+            text-align: center;
+            padding: 14px 20px;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        .navbar-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-right a {
+            padding: 14px;
+            font-size: 18px;
+        }
+
+        /* Content Styles */
+        .content {
+            margin-top: 60px; /* Adjust based on navbar height */
+            padding: 20px;
+        }
+
+        .news {
+            padding: 20px;
+            background: linear-gradient(to bottom, #e0f7fa, #80deea, #40c4ff);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        /* Ticker Styles */
+        .ticker-wrap {
+            width: 100%;
+            overflow: hidden;
+            background: #b3e5fc;
+            color: #000;
+            box-sizing: border-box;
+            position: relative;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            border-radius: 5px;
+        }
+
+        .ticker {
+            display: flex;
+            white-space: nowrap;
+            animation: ticker 30s linear infinite;
+            align-items: center;
+            width: 100%;
+        }
+
+        .ticker-section {
+            display: inline-block;
+            white-space: nowrap;
+            margin-right: 50px;
+            box-sizing: border-box;
+            height: 50px;
+        }
+
+        .ticker-item {
+            display: inline-block;
+            padding: 0 20px;
+            border-right: 1px solid #ccc;
+            line-height: 50px;
+        }
+
+        .title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .author {
+            font-style: italic;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .link {
+            color: #000;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .link:hover {
+            text-decoration: underline;
+        }
+
+        .highlight {
+            color: #0000FF;
+            font-weight: bold;
+            font-size: 1.1em;
+            text-shadow: 
+                1px 1px 0 #ccc, 
+                2px 2px 0 #ccc, 
+                3px 3px 0 #ccc;
+        }
+
+        @keyframes ticker {
+            from {
+                transform: translateX(100%);
+            }
+            to {
+                transform: translateX(-100%);
+            }
+        }
+
+        /* Navigation Controls */
+        .nav-controls {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .nav-button {
+            background: #b3e5fc;
+            border: none;
+            padding: 5px;
+            margin: 5px;
+            cursor: pointer;
+            font-size: 20px;
+            color: #000;
+            line-height: 1;
+            text-align: center;
+            border-radius: 50%;
+            transition: background 0.3s;
+        }
+
+        .nav-button:hover {
+            background: #81d4fa;
+        }
+
+        .nav-button:disabled {
+            background: #ddd;
+            cursor: not-allowed;
+        }
+
+        /* Post Button Styles */
+        .post-button-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .post-button {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #007bff;
+            color: white;
+            font-size: 24px;
+            text-align: center;
+            line-height: 60px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        .post-button:hover {
+            background-color: #0056b3;
+            transform: scale(1.1);
+        }
+
+        /* Post Symbols Styles */
+        .post-symbols {
+            display: none;
+            position: absolute;
+            bottom: 80px; /* Adjust based on the button size */
+            right: 0;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            white-space: nowrap;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        .post-symbols.show {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .post-symbols div {
+            display: flex;
+            align-items: center;
+            margin: 5px 0;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 5px;
+            transition: background-color 0.2s;
+        }
+
+        .post-symbols div:hover {
+            background-color: #f0f0f0;
+        }
+
+        .post-symbols div i {
+            margin-right: 10px;
+            color: #007bff;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 600px) {
+            .ticker-wrap {
+                height: 70px;
+            }
+
+            .ticker-item {
+                padding: 0 10px;
+            }
+
+            .title {
+                font-size: 16px;
+            }
+
+            .author, .link {
+                font-size: 12px;
+            }
+        }
+        .post-creation {
+            margin-top: 40px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff;
+        }
+
+        .post-creation h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .post-creation button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            background-color: #3498db;
+            color: #fff;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .post-creation button:hover {
+            background-color: #2980b9;
+        }
+
+        .post-form {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .post-form textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+        }
+
+        .post-form input[type="file"] {
+            margin: 20px 0;
+        }
+
+        .post-form input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+        }
+
+        .post-form button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            background-color: #3498db;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .post-form button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <a href="home.html">Home</a>
+        <div class="navbar-right">
+            <a href="#news"><i class="fas fa-bell"></i></a>
+            <a href="message.html"><i class="fas fa-envelope"></i></a>
+            <a href="profile.php"><i class="fas fa-user"></i></a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+        <div class="news">
+            <h1>Latest News Articles</h1>
+            <div class="ticker-wrap">
+                <div id="ticker" class="ticker">
+                    <!-- Sections will be inserted here -->
+                </div>
+                <div class="nav-controls">
+                    <button id="prev" class="nav-button" disabled><i class="fas fa-arrow-up"></i></button>
+                    <button id="next" class="nav-button"><i class="fas fa-arrow-down"></i></button>
+                </div>
+            </div>
+            <br><br>
+        </div>
+    </div>
+
+    <!-- Post Button and Options -->
+    <div class="post-button-container" id="postButtonContainer">
+        <div class="post-button" id="postButton">
+            <i class="fas fa-plus"></i>
+        </div>
+        <div class="post-symbols" id="postSymbols">
+            <div id="imageOption" onclick="showPostForm('image')">
+                <i class="fas fa-image"></i> Image
+            </div>
+            <div id="videoOption" onclick="showPostForm('video')">
+                <i class="fas fa-video"></i> Video
+            </div>
+            <div id="contentOption" onclick="showPostForm('content')">
+                <i class="fas fa-pencil-alt"></i> Content
+            </div>
+            <div id="pollOption" onclick="showPostForm('poll')">
+                <i class="fas fa-poll"></i> Poll
+            </div>
+        </div>
+        <!-- Hidden file inputs -->
+        <input type="file" id="fileInputImage" accept="image/*" style="display:none;">
+        <input type="file" id="fileInputVideo" accept="video/*" style="display:none;">
+    </div>
+    <div class="post-creation">
+        <!-- Image Post Form -->
+        <div id="image-post-form" class="post-form">
+            <form action="create_post.php" method="post" enctype="multipart/form-data">
+                <input type="file" name="post_image" accept="image/*" required>
+                <textarea name="post_description" placeholder="Describe your image..." required></textarea>
+                <button type="submit" name="post_type" value="image">Post Image</button>
+            </form>
+        </div>
+
+        <!-- Video Post Form -->
+        <div id="video-post-form" class="post-form">
+            <form action="create_post.php" method="post" enctype="multipart/form-data">
+                <input type="file" name="post_video" accept="video/*" required>
+                <textarea name="post_description" placeholder="Describe your video..." required></textarea>
+                <button type="submit" name="post_type" value="video">Post Video</button>
+            </form>
+        </div>
+
+        <!-- Content Post Form -->
+        <div id="content-post-form" class="post-form">
+            <form action="create_post.php" method="post">
+                <textarea name="post_content" placeholder="Write your content here..." required></textarea>
+                <button type="submit" name="post_type" value="content">Post Content</button>
+            </form>
+        </div>
+
+        <!-- Poll Post Form -->
+        <div id="poll-post-form" class="post-form">
+            <form action="create_post.php" method="post">
+                <input type="text" name="poll_question" placeholder="Poll Question" required>
+                <input type="text" name="poll_option1" placeholder="Option 1" required>
+                <input type="text" name="poll_option2" placeholder="Option 2" required>
+                <input type="text" name="poll_option3" placeholder="Option 3">
+                <input type="text" name="poll_option4" placeholder="Option 4">
+                <button type="submit" name="post_type" value="poll">Create Poll</button>
+            </form>
+        </div>
+    </div>
+    <!-- JavaScript -->
+    <script>
+        // News API Configuration
+        const apiKey = '32120d4e3a1b42879b83ce4a959c738c';
+        const apiUrl = `https://newsapi.org/v2/top-headlines?country=in&apiKey=${apiKey}&pageSize=100`;
+
+        const importantWords = ['India', 'COVID', 'election', 'crisis'];
+        let articles = [];
+        let currentIndex = 0;
+        const itemsPerPage = 3;
+
+        // Fetch Articles from News API
+        async function fetchArticles() {
+            try {
+                let response = await fetch(apiUrl);
+                if (!response.ok) {
+                    throw new Error(`NewsAPI error: ${response.status} ${response.statusText}`);
+                }
+                let data = await response.json();
+                articles = data.articles;
+                displayArticles();
+            } catch (error) {
+                console.error('Failed to fetch articles:', error);
+            }
+        }
+
+        // Display Articles in Ticker
+        function displayArticles() {
+            const ticker = document.getElementById('ticker');
+            ticker.innerHTML = '';
+            const end = Math.min(currentIndex + itemsPerPage, articles.length);
+            for (let i = currentIndex; i < end; i++) {
+                const article = articles[i];
+                const title = highlightImportantWords(article.title);
+                const articleHtml = `
+                    <div class="ticker-section">
+                        <div class="ticker-item">
+                            <div class="title">${title}</div>
+                            <div class="author">${article.author || 'Unknown Author'}</div>
+                            <a class="link" href="${article.url}" target="_blank">Read more</a>
+                        </div>
+                    </div>
+                `;
+                ticker.innerHTML += articleHtml;
+            }
+            document.getElementById('prev').disabled = currentIndex === 0;
+            document.getElementById('next').disabled = currentIndex + itemsPerPage >= articles.length;
+        }
+
+        // Highlight Important Words in Titles
+        function highlightImportantWords(text) {
+            importantWords.forEach(word => {
+                const regex = new RegExp(`\\b${word}\\b`, 'gi');
+                text = text.replace(regex, `<span class="highlight">${word}</span>`);
+            });
+            return text;
+        }
+
+        // Navigation Controls
+        document.getElementById('prev').addEventListener('click', () => {
+            if (currentIndex > 0) {
+                currentIndex -= itemsPerPage;
+                displayArticles();
+            }
+        });
+
+        document.getElementById('next').addEventListener('click', () => {
+            if (currentIndex + itemsPerPage < articles.length) {
+                currentIndex += itemsPerPage;
+                displayArticles();
+            }
+        });
+
+        // Initialize Fetching of Articles
+        fetchArticles();
+
+        // Post Button Functionality
+        const postButton = document.getElementById('postButton');
+        const postSymbols = document.getElementById('postSymbols');
+        const imageOption = document.getElementById('imageOption');
+        const videoOption = document.getElementById('videoOption');
+        const contentOption = document.getElementById('contentOption');
+        const pollOption = document.getElementById('pollOption');
+        const fileInputImage = document.getElementById('fileInputImage');
+        const fileInputVideo = document.getElementById('fileInputVideo');
+
+        // Toggle Post Symbols Visibility
+        postButton.addEventListener('click', () => {
+            postSymbols.classList.toggle('show');
+            // Change the '+' icon to '×' when open
+            const icon = postButton.querySelector('i');
+            if (postSymbols.classList.contains('show')) {
+                icon.classList.remove('fa-plus');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-plus');
+            }
+        });
+
+        // Handle Image Option Click
+
+        // Handle Video Option Click
+        videoOption.addEventListener('click', () => {
+            fileInputVideo.click();
+            togglePostSymbols();
+        });
+
+        // Handle Content Option Click
+        contentOption.addEventListener('click', () => {
+            window.location.href = 'create_content.php'; // Redirect to content creation page
+            togglePostSymbols();
+        });
+
+        // Handle Poll Option Click
+        pollOption.addEventListener('click', () => {
+            window.location.href = 'create_poll.html'; // Redirect to poll creation page
+            togglePostSymbols();
+        });
+
+        // Handle Image File Selection
+        fileInputImage.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                // Implement the code to upload the image
+                // Example: Redirect to upload page with file info
+                alert(`Selected Image: ${file.name}`);
+                // Reset the input
+                fileInputImage.value = '';
+            }
+        });
+
+        // Handle Video File Selection
+        fileInputVideo.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                // Implement the code to upload the video
+                // Example: Redirect to upload page with file info
+                alert(`Selected Video: ${file.name}`);
+                // Reset the input
+                fileInputVideo.value = '';
+            }
+        });
+
+        // Function to Toggle Post Symbols (Hide them)
+        function togglePostSymbols() {
+            postSymbols.classList.remove('show');
+            // Reset the '+' icon
+            const icon = postButton.querySelector('i');
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-plus');
+        }
+
+        // Close post symbols when clicking outside
+        document.addEventListener('click', (event) => {
+            const isClickInside = postButton.contains(event.target) || postSymbols.contains(event.target);
+            if (!isClickInside && postSymbols.classList.contains('show')) {
+                togglePostSymbols();
+            }
+        });
+        function showPostForm(postType) {
+            var forms = document.querySelectorAll('.post-form');
+            forms.forEach(function(form) {
+                form.style.display = 'none';
+            });
+
+            var formToShow = document.getElementById(postType + '-post-form');
+            if (formToShow) {
+                formToShow.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>

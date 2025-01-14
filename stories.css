@@ -1,0 +1,40 @@
+
+.stories{
+    overflow:scroll;
+    display: flex;
+    background-color: #9b9999;
+    border-radius: 10px;
+}
+.stori{
+    display: inline-block;
+    border: 4px solid wheat; 
+    border-radius: 100%;
+    margin: 20px;
+    text-align: center;
+    position: relative;
+}
+a img{
+    width: 100px;
+    height: 100px;
+    border-radius: 80%;
+}
+.stori.viewed {
+    border: none;
+}
+.im{
+    border: 4px solid wheat; 
+    transition: border-color 0.3s ease;
+}
+.im.clicked{
+    border-radius: 100%;
+    border-color: cyan;
+}
+.video-container {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+.video-container video {
+    width: 100%;
+    height: auto;
+}

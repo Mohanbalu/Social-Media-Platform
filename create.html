@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Upload</title>
+    <script>
+        function previewFile() {
+            var preview = document.querySelector('img');
+            var file    = document.querySelector('input[type=file]').files[0];
+            var reader  = new FileReader();
+
+            reader.onloadend = function () {
+                preview.src = reader.result;
+            }
+
+            if (file) {
+                reader.readAsDataURL(file);
+            } else {
+                preview.src = "";
+            }
+        }
+    </script>
+</head>
+<body>
+    <form>
+        <label for="image">Image or Video</label>
+        <input type="file" id="image" name="image" onchange="previewFile()">
+    </form>
+    <div>
+        <img src="" height="200" alt="Image preview...">
+    </div>
+</body>
+</html>

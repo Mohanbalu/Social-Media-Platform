@@ -1,0 +1,49 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    margin: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url(bbg.jpg) no-repeat center center fixed;
+    background-size: cover;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f2f2f2;
+}
+
+
+.Content {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 100vh;
+}
+
+a {
+    text-decoration: none;
+    color: aquamarine;
+}
+
+.heading {
+    margin: 0 20px;
+    text-align: center;
+}
+
+.acc, .Guest, .Permanent {
+    margin: 0 20px; 
+    text-align: center;
+}
+
+.acc h1, .Guest h1, .Permanent h1 {
+    transition: transform 0.3s, color 0.3s;
+}
+
+.acc h1:hover, .Guest h1:hover, .Permanent h1:hover {
+    transform: scale(1.1);
+    color: #ff6347;
+}

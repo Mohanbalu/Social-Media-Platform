@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        body {
+            font-family: Arial;
+            background-image: url("3398219.jpg");
+            background-repeat: no-repeat;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        h2 {
+            margin-top: -600px;
+            margin-right: -245px;
+            text-align: center;
+            color: #fff;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .input-container {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        input {
+            caret-color: rgb(10, 56, 240);
+        }
+        
+        label {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            left: 10px;
+            color: #f00c0c;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            font-size: 20px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            box-sizing: border-box;
+            border-radius: 5px;
+            border: 3px solid #da1c1c;
+            outline: none;
+            font-size: 18px;
+            color: #000;
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+
+        input:focus, input:valid {
+            border-color: #4CAF50;
+        }
+
+        input:focus + label,
+        input:valid + label {
+            top: -25px;
+            font-size: 20px;
+            color: white;
+        }
+
+        button {
+            padding: 12px 24px;
+            background-color: #4CAF50;
+            color: rgb(239, 228, 228);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            outline: none;
+            transition: background-color 0.3s ease;
+            font-size: 18px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        a {
+            color: #c32121;
+            text-decoration: none;
+            font-size: 14px;
+            margin-top: 10px;
+            display: inline-block;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: #ffcc00;
+        }
+
+        form {
+            width: 350px;
+            margin: auto;
+            background-color: rgba(92, 87, 87, 0.8);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: -12px 12px 112px rgb(3, 173, 245);
+        }
+
+        .login-box form .glw {
+            position: relative;
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            text-decoration: none;
+            text-transform: uppercase;
+            overflow: hidden;
+            transition: all 0.5s;
+            margin-top: 40px;
+            letter-spacing: 4px;
+            color: #03e9f4;
+        }
+
+        .login-box .glw:hover {
+            background-color: #03e9f4;
+            color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 5px #03e9f4,
+                        0 0 25px #03e9f4,
+                        0 0 50px #03e9f4,
+                        0 0 100px #03e9f4;
+        }
+
+        button {
+            background-color: #03e9f4;
+        }
+
+        button:hover {
+            background-color: #03e9f4;
+        }
+    </style>
+    <title>Login</title>
+</head>
+<body>
+    <h2>Login page</h2>
+    <div class="login-box">
+        <form class="input-group" action="login.php" method="post" onsubmit="validateForm(event)">
+            <div class="input-container">
+                <input type="text" id="username" name="username" required autocomplete="off" onpaste="return false;">
+                <label for="username">Username</label>
+            </div>
+            <br><br>
+            <div class="input-container">
+                <input type="password" id="password" name="password" required autocomplete="off" onpaste="return false;">
+                <label for="password">Password</label>
+            </div>
+            <a href="forgot_pass.html">Forgot Password</a><br>
+            <div class="glw">
+                <button type="submit">Login</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

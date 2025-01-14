@@ -1,0 +1,174 @@
+<?php
+session_start();
+
+// Check if the user is logged in
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+
+$user_id = $_SESSION['user_id']; // Logged-in user's ID
+
+// Assuming you have a working database connection in $conn
+include 'db_connection.php'; // Include your database connection file
+
+// Retrieve the logged-in user's profile
+$sql_profile = "SELECT u.username, u.email, up.bio, up.profile_image, up.followers, up.following 
+                FROM user_profiles up
+                JOIN users u ON up.user_id = u.id
+                WHERE up.user_id = ?";
+
+$stmt_profile = $conn->prepare($sql_profile);
+$stmt_profile->bind_param('i', $user_id);
+$stmt_profile->execute();
+$result_profile = $stmt_profile->get_result();
+
+if ($result_profile->num_rows > 0) {
+    $profile = $result_profile->fetch_assoc();
+} else {
+    echo "Profile not found.";
+    exit();
+}
+
+// Retrieve the list of users the logged-in user is following
+$sql_following = "SELECT u.id, u.username, up.profile_image 
+                  FROM user_followers uf
+                  JOIN users u ON uf.following_id = u.id
+                  JOIN user_profiles up ON u.id = up.user_id
+                  WHERE uf.follower_id = ?";
+
+$stmt_following = $conn->prepare($sql_following);
+$stmt_following->bind_param('i', $user_id);
+$stmt_following->execute();
+$result_following = $stmt_following->get_result();
+
+$following_list = [];
+while ($row = $result_following->fetch_assoc()) {
+    $following_list[] = $row;
+}
+
+// Retrieve the list of users following the logged-in user
+$sql_followers = "SELECT u.id, u.username, up.profile_image 
+                  FROM user_followers uf
+                  JOIN users u ON uf.follower_id = u.id
+                  JOIN user_profiles up ON u.id = up.user_id
+                  WHERE uf.following_id = ?";
+
+$stmt_followers = $conn->prepare($sql_followers);
+$stmt_followers->bind_param('i', $user_id);
+$stmt_followers->execute();
+$result_followers = $stmt_followers->get_result();
+
+$followers_list = [];
+while ($row = $result_followers->fetch_assoc()) {
+    $followers_list[] = $row;
+}
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Message Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .profile {
+            margin-bottom: 30px;
+        }
+        .profile img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-right: 20px;
+        }
+        .profile-details {
+            display: flex;
+            align-items: center;
+        }
+        .profile-info {
+            margin-left: 20px;
+        }
+        .followers, .following {
+            margin-bottom: 20px;
+        }
+        .user-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .user-item img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .section-title {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Profile Information -->
+    <div class="profile">
+        <h1><?php echo htmlspecialchars($profile['username']); ?>'s Profile</h1>
+        <div class="profile-details">
+            <img src="<?php echo htmlspecialchars($profile['profile_image'] ?? 'default_profile.jpg'); ?>" alt="Profile Picture">
+            <div class="profile-info">
+                <p><strong>Email:</strong> <?php echo htmlspecialchars($profile['email']); ?></p>
+                <p><strong>Bio:</strong> <?php echo htmlspecialchars($profile['bio']); ?></p>
+                <p><strong>Followers:</strong> <?php echo $profile['followers']; ?></p>
+                <p><strong>Following:</strong> <?php echo $profile['following']; ?></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Following Section -->
+    <div class="following">
+        <h2 class="section-title">Following</h2>
+        <?php if (count($following_list) > 0): ?>
+            <?php foreach ($following_list as $following): ?>
+                <div class="user-item">
+                    <img src="<?php echo htmlspecialchars($following['profile_image'] ?? 'default_profile.jpg'); ?>" alt="User Image">
+                    <p><?php echo htmlspecialchars($following['username']); ?></p>
+                </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p>You are not following anyone yet.</p>
+        <?php endif; ?>
+    </div>
+
+    <!-- Followers Section -->
+    <div class="followers">
+        <h2 class="section-title">Followers</h2>
+        <?php if (count($followers_list) > 0): ?>
+            <?php foreach ($followers_list as $follower): ?>
+                <div class="user-item">
+                    <img src="<?php echo htmlspecialchars($follower['profile_image'] ?? 'default_profile.jpg'); ?>" alt="User Image">
+                    <p><?php echo htmlspecialchars($follower['username']); ?></p>
+                </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p>No one is following you yet.</p>
+        <?php endif; ?>
+    </div>
+</div>
+
+</body>
+</html>
