@@ -20,7 +20,7 @@ This project is a custom-built social media platform developed using web develop
 
 ### 3. Newsfeed
 - **Dynamic Content Display**:
-  - A personalized feed displaying posts from friends and followed accounts.
+  - A personalized feed displaying posts from friends and following accounts.
 - **Sorting**:
   - Chronological or popularity-based sorting of posts.
 
@@ -58,7 +58,7 @@ This project is a custom-built social media platform developed using web develop
 ## Installation Instructions
 1. **Clone the Repository**:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/Mohanbalu/Social-Media-Platform
    ```
 2. **Set Up Server**:
    - Use XAMPP or any LAMP/WAMP stack for setting up the server.
@@ -67,7 +67,7 @@ This project is a custom-built social media platform developed using web develop
    - Update database credentials in the `config.php` file.
 4. **Launch Application**:
    - Place the project folder in the server's root directory (e.g., `htdocs` for XAMPP).
-   - Navigate to `http://localhost/<project-folder>` in your web browser.
+   - Navigate to `http://localhost/SocialMediaPlatform` in your web browser.
 
 ## Folder Structure
 ```plaintext
